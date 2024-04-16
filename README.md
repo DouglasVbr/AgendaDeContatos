@@ -1,9 +1,6 @@
-# AgendaDeContatos
-
-PARTE-JFRAME
-
 package AgendaDeContatos;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class AgendaContatosUI extends javax.swing.JFrame {
@@ -14,6 +11,24 @@ public class AgendaContatosUI extends javax.swing.JFrame {
         super("Agenda de Contatos");
         agenda = new Agenda(100); // Criando uma agenda com tamanho máximo de 100 contatos
         initComponents();
+    }
+    
+    /*@Test*/
+    public void testLimparCampos() {
+        AgendaContatosUI instance = new AgendaContatosUI();
+        
+        // Configurar os campos com algum texto
+        instance.txtNome.setText("João");
+        instance.txtFone.setText("123456789");
+        instance.txtEmail.setText("joao@example.com");
+        
+        // Chamar o método para limpar os campos
+        instance.limparCampos();
+        
+        // Verificar se os campos foram limpos corretamente
+        assertEquals("", instance.txtNome.getText());
+        assertEquals("", instance.txtFone.getText());
+        assertEquals("", instance.txtEmail.getText());
     }
 
     @SuppressWarnings("unchecked")
@@ -173,7 +188,12 @@ public class AgendaContatosUI extends javax.swing.JFrame {
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {                                             
         String nome = txtNome.getText();
-        agenda.pesquisarContato(nome);
+        Contato contato = agenda.pesquisarContato(nome);
+        if (contato != null) {
+            JOptionPane.showMessageDialog(null, "Contato encontrado:\n" + contato.toString());
+        } else {
+            JOptionPane.showMessageDialog(null, "Contato não encontrado!");
+        }
     }                                            
 
     private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {                                        
@@ -188,7 +208,7 @@ public class AgendaContatosUI extends javax.swing.JFrame {
 
     }                                        
 
-    private void limparCampos() {
+    void limparCampos() {
         txtNome.setText("");
         txtFone.setText("");
         txtEmail.setText("");
@@ -240,9 +260,20 @@ public class AgendaContatosUI extends javax.swing.JFrame {
     private javax.swing.JTextField txtNome;
     // End of variables declaration                   
 
+    private void assertEquals(String string, String text) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    void setNome(String joão) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    void setEmail(String joaoexamplecom) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
 
-PARTE - CONTATO
 
 package AgendaDeContatos;
 
@@ -293,16 +324,16 @@ public class Contato {
     public String toString() {
         return "Nome: " + nome + "\nTelefone: " + telefone + "\nE-mail: " + email;
     }
+    
+    
 }
-
-PARTE- AGENDA
-
+   
 
 package AgendaDeContatos;
 
 import javax.swing.JOptionPane;
 
-class Agenda {
+public class Agenda {
     private Contato[] contatos;
     private int tamanhoMaximo;
     private int quantidadeContatos;
@@ -324,23 +355,17 @@ class Agenda {
     }
 
     // Método para pesquisar um contato na agenda pelo nome
-    public void pesquisarContato(String nome) {
-        boolean encontrado = false;
+    public Contato pesquisarContato(String nome) {
         for (int i = 0; i < quantidadeContatos; i++) {
             if (contatos[i].getNome().equalsIgnoreCase(nome)) {
-                JOptionPane.showMessageDialog(null, "Contato encontrado:\nNome: " + contatos[i].getNome() + "\nTelefone: " + contatos[i].getTelefone());
-                encontrado = true;
-                break;
+                return contatos[i];
             }
         }
-        if (!encontrado) {
-            JOptionPane.showMessageDialog(null, "Contato não encontrado!");
-        }
+        return null; // Retornar null se o contato não for encontrado
     }
 
     // Método para excluir um contato da agenda pelo nome
     public void excluirContato(String nome) {
-        boolean encontrado = false;
         for (int i = 0; i < quantidadeContatos; i++) {
             if (contatos[i].getNome().equalsIgnoreCase(nome)) {
                 // Desloca os contatos à direita para preencher a posição removida
@@ -349,13 +374,312 @@ class Agenda {
                 }
                 quantidadeContatos--;
                 JOptionPane.showMessageDialog(null, "Contato excluído com sucesso!");
-                encontrado = true;
-                break;
+                return; // Não precisa continuar o loop após encontrar e excluir o contato
             }
         }
-        if (!encontrado) {
-            JOptionPane.showMessageDialog(null, "Contato não encontrado!");
-        }
+        JOptionPane.showMessageDialog(null, "Contato não encontrado!");
+    }
+
+    // Método para obter o total de contatos na agenda
+    public int getTotalContatos() {
+        return quantidadeContatos;
+    }
+
+    void excluirContato(Contato contato) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+   
+}
+  
+
+package AgendaDeContatos;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+
+public class AgendaContatosUITest {
+    
+    public AgendaContatosUITest() {
+    }
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
+    }
+    
+    @After
+    public void tearDown() {
+    }
+
+    /**
+     * Test of testLimparCampos method, of class AgendaContatosUI.
+     */
+    @Test
+    public void testTestLimparCampos() {
+       // Crie uma instância da AgendaContatosUI
+        AgendaContatosUI agendaUI = new AgendaContatosUI();
+        
+        // Defina o estado inicial, por exemplo, preencha alguns campos
+        agendaUI.setName("João");
+        agendaUI.setTitle("joao@example.com");
+        
+        // Chame o método a ser testado
+        agendaUI.limparCampos();
+        
+        // Verifique se os campos foram limpos corretamente
+        assertEquals("", agendaUI.getName());
+        assertEquals("", agendaUI.getExtendedState());
+    }
+
+    /**
+     * Test of main method, of class AgendaContatosUI.
+     */
+    @Test
+    public void testMain() {
+       
+    }
+
+    /**
+     * Test of limparCampos method, of class AgendaContatosUI.
+     */
+    @Test
+    public void testLimparCampos() {
+        System.out.println("limparCampos");
+        AgendaContatosUI instance = new AgendaContatosUI();
+        instance.limparCampos();
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of setNome method, of class AgendaContatosUI.
+     */
+    @Test
+    public void testSetNome() {
+        System.out.println("setNome");
+        String joão = "";
+        AgendaContatosUI instance = new AgendaContatosUI();
+        instance.setNome(joão);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of setEmail method, of class AgendaContatosUI.
+     */
+    @Test
+    public void testSetEmail() {
+        System.out.println("setEmail");
+        String joaoexamplecom = "";
+        AgendaContatosUI instance = new AgendaContatosUI();
+        instance.setEmail(joaoexamplecom);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+    
+}
+
+
+
+package AgendaDeContatos;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+/**
+ *
+ * @author Douglas
+ */
+public class AgendaTest {
+    
+    public AgendaTest() {
+    }
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
+    }
+    
+    @After
+    public void tearDown() {
+    }
+
+    /**
+     * Test of adicionarContato method, of class Agenda.
+     */
+    @Test
+    public void testAdicionarContato() {
+        Agenda agenda = new Agenda(0);
+        
+        // Adicione um contato
+        Contato contato = new Contato("João", "123456789");
+        agenda.adicionarContato(contato);
+        
+        // Verifique se o contato foi adicionado corretamente
+        assertEquals(1, agenda.getTotalContatos());
+    }
+
+    @Test
+    public void testPesquisarContato() {
+        Agenda agenda = new Agenda(0);
+        
+        // Adicione um contato
+        Contato contato = new Contato("Maria", "987654321");
+        agenda.adicionarContato(contato);
+        
+        // Pesquise o contato
+        Contato contatoEncontrado = agenda.pesquisarContato("Maria");
+        
+        // Verifique se o contato foi encontrado corretamente
+        assertNotNull(contatoEncontrado);
+        assertEquals("Maria", contatoEncontrado.getNome());
+        assertEquals("987654321", contatoEncontrado.getTelefone());
+    }
+
+    @Test
+    public void testExcluirContato() {
+        Agenda agenda = new Agenda(0);
+        
+        // Adicione um contato
+        Contato contato = new Contato("Carlos", "111222333");
+        agenda.adicionarContato(contato);
+        
+        // Exclua o contato
+        agenda.excluirContato("");
+        
+        // Verifique se o contato foi excluído corretamente
+        assertEquals(0, agenda.getTotalContatos());
     }
 }
+    
+
+
+package AgendaDeContatos;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+/**
+ *
+ * @author Douglas
+ */
+public class ContatoTest {
+    
+    public ContatoTest() {
+    }
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
+    }
+    
+    @After
+    public void tearDown() {
+    }
+
+    /**
+     * Test of getNome method, of class Contato.
+     */
+    @Test
+    public void testGetNome() {
+        Contato contato = new Contato("João", "123456789", "joao@example.com");
+        assertEquals("João", contato.getNome());
+    }
+
+    /**
+     * Test of setNome method, of class Contato.
+     */
+    @Test
+    public void testSetNome() {
+        Contato contato = new Contato("Maria", "987654321", "maria@example.com");
+        contato.setNome("Ana");
+        assertEquals("Ana", contato.getNome());
+    }
+
+    /**
+     * Test of getTelefone method, of class Contato.
+     */
+    @Test
+    public void testGetTelefone() {
+        Contato contato = new Contato("Carlos", "111222333", "carlos@example.com");
+        assertEquals("111222333", contato.getTelefone());
+    }
+
+    /**
+     * Test of setTelefone method, of class Contato.
+     */
+    @Test
+    public void testSetTelefone() {
+        Contato contato = new Contato("Pedro", "444555666", "pedro@example.com");
+        contato.setTelefone("777888999");
+        assertEquals("777888999", contato.getTelefone());
+    }
+
+    /**
+     * Test of getEmail method, of class Contato.
+     */
+    @Test
+    public void testGetEmail() {
+        Contato contato = new Contato("Ana", "999888777", "ana@example.com");
+        assertEquals("ana@example.com", contato.getEmail());
+    }
+
+    /**
+     * Test of setEmail method, of class Contato.
+     */
+    @Test
+    public void testSetEmail() {
+        Contato contato = new Contato("Mariana", "555444333", "mariana@example.com");
+        contato.setEmail("mariana.updated@example.com");
+        assertEquals("mariana.updated@example.com", contato.getEmail());
+    }
+
+    /**
+     * Test of toString method, of class Contato.
+     */
+    @Test
+    public void testToString() {
+        Contato contato = new Contato("Lucas", "222333444", "lucas@example.com");
+        String expected = "Nome: Lucas, Telefone: 222333444, Email: lucas@example.com";
+        assertEquals(expected, contato.toString());
+    }
+    
+}
+
 
